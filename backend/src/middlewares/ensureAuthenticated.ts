@@ -30,6 +30,8 @@ export default function ensureAuthenticated(
     req.user = {
       id: sub,
     };
+
+    return next();
   } catch {
     throw new Error('Invalid JWT token');
   }

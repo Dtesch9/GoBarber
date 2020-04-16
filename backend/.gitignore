@@ -1,3 +1,8 @@
-node_modules
-.env
-.vscode
+node_modules/
+.env/
+.vscode/
+build/
+temp/
+
+tmp/*
+!tmp/.gitkeep
