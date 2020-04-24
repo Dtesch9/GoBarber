@@ -27,35 +27,22 @@ export const Content = styled.div`
     h1 {
       margin-bottom: 24px;
     }
-
-    a {
-      color: #f4ede8;
-      display: block;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
-
-      &:hover {
-        color: ${shade(0.2, '#f4ede8')};
-      }
-    }
   }
 
-  > a {
-      color: #f4ede8;
-      display: flex;
-      align-items: center;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
+  a {
+    color: #f4ede8;
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    text-decoration: none;
+    transition: color 0.2s;
 
-      svg {
-        margin-right: 16px;
-      }
+    svg {
+      margin-right: 16px;
+    }
 
-      &:hover {
-        color: ${shade(0.2, '#f4ede8')};
-      }
+    &:hover {
+      color: ${shade(0.2, '#f4ede8')};
     }
   }
 `;

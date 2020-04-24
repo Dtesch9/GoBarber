@@ -42,26 +42,25 @@ export const Content = styled.div`
   }
 
   > a {
-      color: #ff9000;
-      display: flex;
-      align-items: center;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
+    color: #ff9000;
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    text-decoration: none;
+    transition: color 0.2s;
 
-      svg {
-        margin-right: 16px;
-      }
+    svg {
+      margin-right: 16px;
+    }
 
-      &:hover {
-        color: ${shade(0.2, '#ff9000')};
-      }
+    &:hover {
+      color: ${shade(0.2, '#ff9000')};
     }
   }
 `;
 
 export const Background = styled.div`
   flex: 1;
-  background: url(${signInBackgroundImg}) no-repeat;
+  background: url(${signInBackgroundImg}) no-repeat center;
   background-size: cover;
 `;
