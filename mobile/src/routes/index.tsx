@@ -11,6 +11,8 @@ const AuthRoutes: React.FC = () => (
     screenOptions={{
       headerShown: false,
       cardStyle: { backgroundColor: '#312e38' },
+      gestureEnabled: true,
+      gestureDirection: 'horizontal',
     }}
   >
     <Auth.Screen name="SignIn" component={SignIn} />
