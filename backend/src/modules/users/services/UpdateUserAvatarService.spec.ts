@@ -36,7 +36,7 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('shoud not be able to update avatar without been authenticated', async () => {
-    expect(
+    await expect(
       updateUserAvatarService.execute({
         avatarFilename: 'avatar.jpg',
         user_id: 'non-existing-user',
