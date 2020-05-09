@@ -20,7 +20,7 @@ describe('CreateUser', () => {
     );
   });
 
-  it('shoud be able to create a new user', async () => {
+  it('should be able to create a new user', async () => {
     const user = await createUserService.execute({
       name: 'John Doe',
       email: 'jhondoe@example.com',
@@ -30,7 +30,7 @@ describe('CreateUser', () => {
     expect(user).toHaveProperty('id');
   });
 
-  it('shoud not be able to create a new user with an already used email', async () => {
+  it('should not be able to create a new user with an already used email', async () => {
     await createUserService.execute({
       name: 'John Doe',
       email: 'jhondoe@example.com',

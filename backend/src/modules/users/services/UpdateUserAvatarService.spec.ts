@@ -20,7 +20,7 @@ describe('UpdateUserAvatar', () => {
     );
   });
 
-  it('shoud be able to create a new user', async () => {
+  it('should be able to create a new user', async () => {
     const user = await fakeUserRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -35,7 +35,7 @@ describe('UpdateUserAvatar', () => {
     expect(user.avatar).toBe('avatar.jpg');
   });
 
-  it('shoud not be able to update avatar without been authenticated', async () => {
+  it('should not be able to update avatar without been authenticated', async () => {
     await expect(
       updateUserAvatarService.execute({
         avatarFilename: 'avatar.jpg',
