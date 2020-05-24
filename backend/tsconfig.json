@@ -3,12 +3,6 @@
     "target": "es5",
     "module": "commonjs",
     "outDir": "./dist",
-    "allowJs": true,
-    "exclude": [
-      "coverage",
-      "*.config.js",
-      "node_modules"
-    ],
     "rootDir": "./src",
     "strict": true,
     "strictPropertyInitialization": false,
