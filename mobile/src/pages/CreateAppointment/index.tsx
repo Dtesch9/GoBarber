@@ -48,7 +48,7 @@ interface AvailabilityItem {
 const CreateAppointment: React.FC = () => {
   const { user } = useAuth();
   const route = useRoute();
-  const { goBack, navigate } = useNavigation();
+  const { goBack, reset } = useNavigation();
 
   const routeParams = route.params as RouteParams;
 
@@ -119,14 +119,19 @@ const CreateAppointment: React.FC = () => {
         date,
       });
 
-      navigate('AppointmentCreated', { date: date.getTime() });
+      reset({
+        routes: [
+          { name: 'AppointmentCreated', params: { date: date.getTime() } },
+        ],
+        index: 0,
+      });
     } catch (err) {
       Alert.alert(
         'Erro ao criar agendamento',
         'Ocorreu um erro ao tentar criar agendamento, tente novamente',
       );
     }
-  }, [selectedDate, selectedProvider, selectedHour, navigate]);
+  }, [selectedDate, selectedProvider, selectedHour, reset]);
 
   const morningAvailability = useMemo(() => {
     return availability
