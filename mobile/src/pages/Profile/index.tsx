@@ -158,19 +158,26 @@ const SignUp: React.FC = () => {
           return;
         }
 
+        const imageType = response.fileName?.split('.')[1];
+
         const data = new FormData();
 
         data.append('avatar', {
-          type: 'multipart/form-data',
-          name: `${user.id}-${response.fileName}`,
           uri: response.uri,
+          name: `${user.id}-${response.fileName}`,
+          type: `image/${imageType}`,
         });
 
         try {
-          const apiResponse = await api.patch('/users/avatar', data);
+          const apiResponse = await api.patch('/users/avatar', data, {
+            headers: {
+              'Access-Control-Allow-Methods': 'PATCH',
+            },
+          });
 
           updateUser(apiResponse.data);
         } catch (err) {
+          console.log(err);
           Alert.alert('Ocorreu um erro', 'Tente novamente');
         }
       },
