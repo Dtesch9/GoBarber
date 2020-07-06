@@ -152,7 +152,12 @@ const Profile: React.FC = () => {
             <label htmlFor="avatar">
               <FiCamera />
 
-              <input type="file" id="avatar" onChange={handleAvatarChange} />
+              <input
+                type="file"
+                id="avatar"
+                onChange={handleAvatarChange}
+                data-testid="avatar-input"
+              />
             </label>
           </AvatarInput>
 
@@ -173,7 +178,7 @@ const Profile: React.FC = () => {
             name="password"
             icon={FiLock}
             type="password"
-            placeholder="Nova Senha"
+            placeholder="Nova senha"
           />
 
           <Input
