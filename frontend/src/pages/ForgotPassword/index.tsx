@@ -87,8 +87,6 @@ const ForgotPassword: React.FC = () => {
             <Button loading={Number(loading)} type="submit">
               Recuperar
             </Button>
-
-            <Link to="/sigin" />
           </Form>
 
           <Link to="/signup">
