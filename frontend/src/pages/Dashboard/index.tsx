@@ -42,8 +42,8 @@ interface Appointment {
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(Date.now()));
+  const [currentMonth, setCurrentMonth] = useState(new Date(Date.now()));
 
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailabilityItem[]
@@ -90,7 +90,6 @@ const Dashboard: React.FC = () => {
             hourFormatted: format(parseISO(appointment.date), 'HH:mm'),
           };
         });
-
         setAppointments(appointmentsFormatted);
       });
   }, [selectedDate]);
@@ -130,7 +129,7 @@ const Dashboard: React.FC = () => {
 
   const nextAppointment = useMemo(() => {
     return appointments.find(appointment =>
-      isAfter(parseISO(appointment.date), new Date()),
+      isAfter(parseISO(appointment.date), new Date(Date.now())),
     );
   }, [appointments]);
 
@@ -150,7 +149,7 @@ const Dashboard: React.FC = () => {
             </div>
           </Profile>
 
-          <button type="button" onClick={signOut}>
+          <button type="button" onClick={signOut} data-testid="sign-out-button">
             <FiPower />
           </button>
         </HeaderContent>
@@ -239,7 +238,7 @@ const Dashboard: React.FC = () => {
         <Calendar>
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
-            fromMonth={new Date()}
+            fromMonth={new Date(Date.now())}
             disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
             modifiers={{
               available: { daysOfWeek: [1, 2, 3, 4, 5] },
