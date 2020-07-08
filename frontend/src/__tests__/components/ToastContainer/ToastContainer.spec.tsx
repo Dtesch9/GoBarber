@@ -11,6 +11,20 @@ describe('Toast Container Component', () => {
         title: 'Test toast',
         description: 'Display toast description',
       },
+    ];
+
+    const { getByTestId } = render(<ToastContainer messages={toastMessages} />);
+
+    expect(getByTestId('toast-container')).toBeTruthy();
+  });
+
+  it('should be able to display all messages', () => {
+    const toastMessages = [
+      {
+        id: '1',
+        title: 'Test toast',
+        description: 'Display toast description',
+      },
       {
         id: '2',
         title: 'Test toast2',
