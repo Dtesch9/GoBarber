@@ -174,5 +174,7 @@ describe('Auth Hooks', () => {
       '@GoBarber:user',
       JSON.stringify(updatedUser),
     );
+
+    expect(result.current.user).toEqual(updatedUser);
   });
 });
