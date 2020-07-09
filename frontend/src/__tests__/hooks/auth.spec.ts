@@ -10,7 +10,7 @@ const spyGetItem = jest.spyOn(Storage.prototype, 'getItem');
 
 const mockApi = new MockAdapter(api);
 
-describe('Auth Hooks', () => {
+describe('Auth Hook', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
