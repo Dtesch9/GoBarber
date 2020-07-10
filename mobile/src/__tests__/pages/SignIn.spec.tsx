@@ -53,7 +53,7 @@ describe('SignIn page', () => {
     });
   });
 
-  it('should display an error if login fails', async () => {
+  it('should display an error if sign in fails', async () => {
     mockSignIn.mockImplementation(() => {
       throw new Error();
     });
@@ -129,7 +129,7 @@ describe('SignIn page', () => {
     });
   });
 
-  it('should be able to navigate to sign up when pressing CreateAccountButton', () => {
+  it('should be able to navigate to sign in when pressing CreateAccountButton', () => {
     const { getByTestId } = render(<SignIn />);
 
     const createAccountButton = getByTestId('create-account-button');

@@ -60,4 +60,106 @@ describe('SignUp page', () => {
       expect(mockGoBack).toHaveBeenCalled();
     });
   });
+
+  it('should not be able to sign up with invalid credentials', async () => {
+    mockApi.onPost('/users').reply(401);
+
+    const spyAlert = jest.spyOn(Alert, 'alert');
+
+    const { getByPlaceholder } = render(<SignUp />);
+
+    const nameInput = getByPlaceholder('Nome');
+    const emailInput = getByPlaceholder('E-mail');
+    const passwordInput = getByPlaceholder('Senha');
+
+    fireEvent(nameInput, 'onChangeText', 'user-name');
+    fireEvent(nameInput, 'onSubmitEditing');
+
+    fireEvent(emailInput, 'onChangeText', 'invalid-email');
+    fireEvent(emailInput, 'onSubmitEditing');
+
+    fireEvent(passwordInput, 'onChangeText', 'user-password');
+    fireEvent(passwordInput, 'onSubmitEditing');
+
+    await waitFor(() => {
+      expect(spyAlert).not.toHaveBeenCalled();
+
+      expect(mockGoBack).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should display an error if sign in fails', async () => {
+    mockApi.onPost('/users').reply(401);
+
+    const spyAlert = jest.spyOn(Alert, 'alert');
+
+    const { getByPlaceholder } = render(<SignUp />);
+
+    const nameInput = getByPlaceholder('Nome');
+    const emailInput = getByPlaceholder('E-mail');
+    const passwordInput = getByPlaceholder('Senha');
+
+    fireEvent(nameInput, 'onChangeText', 'user-name');
+    fireEvent(nameInput, 'onSubmitEditing');
+
+    fireEvent(emailInput, 'onChangeText', 'user@email.com');
+    fireEvent(emailInput, 'onSubmitEditing');
+
+    fireEvent(passwordInput, 'onChangeText', 'user-password');
+    fireEvent(passwordInput, 'onSubmitEditing');
+
+    await waitFor(() => {
+      expect(mockGoBack).not.toHaveBeenCalled();
+
+      expect(spyAlert).toHaveBeenCalledWith(
+        'Erro no cadastro!',
+        'Ocorreu um erro ao fazer cadastro, tente novamente',
+      );
+    });
+  });
+
+  it('should be able to sign in by pressing submit button', async () => {
+    mockApi.onPost('/users').reply(200);
+
+    const spyAlert = jest.spyOn(Alert, 'alert');
+
+    const { getByPlaceholder, getByText } = render(<SignUp />);
+
+    const nameInput = getByPlaceholder('Nome');
+    const emailInput = getByPlaceholder('E-mail');
+    const passwordInput = getByPlaceholder('Senha');
+
+    const submitButton = getByText('Criar');
+
+    fireEvent(nameInput, 'onChangeText', 'user-name');
+    fireEvent(nameInput, 'onSubmitEditing');
+
+    fireEvent(emailInput, 'onChangeText', 'user@email.com');
+    fireEvent(emailInput, 'onSubmitEditing');
+
+    fireEvent(passwordInput, 'onChangeText', 'user-password');
+
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(spyAlert).toHaveBeenCalledWith(
+        'Cadastro realizado com sucesso!',
+        'Você já pode fazer login na aplicação',
+      );
+
+      expect(mockGoBack).toHaveBeenCalled();
+    });
+  });
+
+  it('should be able to sign in by pressing submit button', async () => {
+    const { getByText } = render(<SignUp />);
+
+    const submitButton = getByText('Voltar para logon');
+
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(mockGoBack).toHaveBeenCalled();
+    });
+  });
 });
