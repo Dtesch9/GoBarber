@@ -23,7 +23,7 @@ describe('SignUp page', () => {
     jest.clearAllMocks();
   });
 
-  it('should be able to render sign up component', () => {
+  it('should be able to render sign up page', () => {
     const { getByPlaceholder } = render(<SignUp />);
 
     expect(getByPlaceholder('Nome')).toBeTruthy();
@@ -151,7 +151,7 @@ describe('SignUp page', () => {
     });
   });
 
-  it('should be able to sign in by pressing submit button', async () => {
+  it('should be able to navigate to sign in when pressing BackToSinInButton', async () => {
     const { getByText } = render(<SignUp />);
 
     const submitButton = getByText('Voltar para logon');

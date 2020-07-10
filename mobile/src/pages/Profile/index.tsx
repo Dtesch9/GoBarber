@@ -38,7 +38,7 @@ interface ProfileFormData {
   password_confirmation: string;
 }
 
-const SignUp: React.FC = () => {
+const Profile: React.FC = () => {
   const { user, updateUser, signOut } = useAuth();
 
   const navigation = useNavigation();
@@ -274,4 +274,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default Profile;

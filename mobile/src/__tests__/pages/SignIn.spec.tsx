@@ -24,7 +24,7 @@ describe('SignIn page', () => {
     jest.clearAllMocks();
   });
 
-  it('should be able to render sign in component', () => {
+  it('should be able to render sign in page', () => {
     const { getByPlaceholder } = render(<SignIn />);
 
     expect(getByPlaceholder('E-mail')).toBeTruthy();
