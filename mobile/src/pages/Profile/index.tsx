@@ -177,7 +177,6 @@ const SignUp: React.FC = () => {
 
           updateUser(apiResponse.data);
         } catch (err) {
-          console.log(err);
           Alert.alert('Ocorreu um erro', 'Tente novamente');
         }
       },
