@@ -190,11 +190,14 @@ const Profile: React.FC = () => {
       >
         <ScrollView keyboardShouldPersistTaps="handled">
           <Container>
-            <BackButton onPress={handleGoBack}>
+            <BackButton onPress={handleGoBack} testID="go-back-button">
               <Icon name="chevron-left" size={28} color="#999591" />
             </BackButton>
 
-            <UserAvatarButton onPress={handleUpdateAvatar}>
+            <UserAvatarButton
+              onPress={handleUpdateAvatar}
+              testID="user-avatar-button"
+            >
               <UserAvatar source={{ uri: user.avatar_url }} />
             </UserAvatarButton>
 
@@ -256,7 +259,7 @@ const Profile: React.FC = () => {
                 secureTextEntry
                 name="password_confirmation"
                 icon="lock"
-                placeholder="Confirmar de senha"
+                placeholder="Confirmar senha"
                 textContentType="newPassword"
                 returnKeyType="send"
                 onSubmitEditing={() => formRef.current?.submitForm()}
