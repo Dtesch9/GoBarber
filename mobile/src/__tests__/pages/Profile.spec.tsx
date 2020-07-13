@@ -55,6 +55,13 @@ const mockApi = new MockAdapter(api);
 describe('Profile page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    Object.assign(mockImagePickerCallback, {
+      didCancel: false,
+      error: '',
+      fileName: 'image.jpg',
+      uri: 'file:///path/locale/image.jpg',
+    });
   });
 
   it('should be able to render Profile page', () => {
@@ -223,21 +230,14 @@ describe('Profile page', () => {
   it('should be able to go back when pressing goBack button', () => {
     const { getByTestId } = render(<Profile />);
 
-    const logoutButton = getByTestId('go-back-button');
+    const goBackButton = getByTestId('go-back-button');
 
-    fireEvent.press(logoutButton);
+    fireEvent.press(goBackButton);
 
     expect(mockGoBack).toHaveBeenCalledTimes(1);
   });
 
   it('should be able to update avatar', async () => {
-    Object.assign(mockImagePickerCallback, {
-      didCancel: false,
-      error: '',
-      fileName: 'image.jpg',
-      uri: 'file:///path/locale/image.jpg',
-    });
-
     mockApi.onPatch('/users/avatar').reply(200, mockUser);
 
     const { getByTestId } = render(<Profile />);
@@ -256,12 +256,7 @@ describe('Profile page', () => {
   });
 
   it('should not be able to update avatar if cancelled', async () => {
-    Object.assign(mockImagePickerCallback, {
-      didCancel: true,
-      error: '',
-      fileName: 'image.jpg',
-      uri: 'file:///path/locale/image.jpg',
-    });
+    mockImagePickerCallback.didCancel = true;
 
     const { getByTestId } = render(<Profile />);
 
@@ -276,13 +271,8 @@ describe('Profile page', () => {
     });
   });
 
-  it('should not be able to update avatar receive ImagePicker error', async () => {
-    Object.assign(mockImagePickerCallback, {
-      didCancel: false,
-      error: 'Any-type-of-error',
-      fileName: 'image.jpg',
-      uri: 'file:///path/locale/image.jpg',
-    });
+  it('should not be able to update avatar if receive ImagePicker error', async () => {
+    mockImagePickerCallback.error = 'Any-type-of-error';
 
     const { getByTestId } = render(<Profile />);
 
@@ -303,13 +293,6 @@ describe('Profile page', () => {
   });
 
   it('should display an erro if api call fails', async () => {
-    Object.assign(mockImagePickerCallback, {
-      didCancel: false,
-      error: '',
-      fileName: 'image.jpg',
-      uri: 'file:///path/locale/image.jpg',
-    });
-
     mockApi.onPatch('/users/avatar').reply(401);
 
     const { getByTestId } = render(<Profile />);
