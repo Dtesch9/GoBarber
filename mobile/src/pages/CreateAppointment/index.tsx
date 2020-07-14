@@ -54,7 +54,7 @@ const CreateAppointment: React.FC = () => {
 
   const [availability, setAvailability] = useState<AvailabilityItem[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(Date.now()));
   const [selectedHour, setSelectedHour] = useState(0);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState(
@@ -140,7 +140,7 @@ const CreateAppointment: React.FC = () => {
         return {
           hour,
           available,
-          hourFormatted: format(new Date().setHours(hour), 'HH:00'),
+          hourFormatted: format(new Date(Date.now()).setHours(hour), 'HH:00'),
         };
       });
   }, [availability]);
@@ -152,7 +152,7 @@ const CreateAppointment: React.FC = () => {
         return {
           hour,
           available,
-          hourFormatted: format(new Date().setHours(hour), 'HH:00'),
+          hourFormatted: format(new Date(Date.now()).setHours(hour), 'HH:00'),
         };
       });
   }, [availability]);
@@ -179,6 +179,7 @@ const CreateAppointment: React.FC = () => {
               <ProviderContainer
                 onPress={() => handleSelecProvider(provider.id)}
                 selected={provider.id === selectedProvider}
+                testID={`provider-${provider.id}-button`}
               >
                 <ProviderAvatar
                   source={{
@@ -230,6 +231,7 @@ const CreateAppointment: React.FC = () => {
                 available={available}
                 key={hourFormatted}
                 onPress={() => handleSelectHour(hour)}
+                testID={`morning-hour-container-${hour}`}
               >
                 <HourText selected={selectedHour === hour}>
                   {hourFormatted}
@@ -250,6 +252,7 @@ const CreateAppointment: React.FC = () => {
                 available={available}
                 key={hourFormatted}
                 onPress={() => handleSelectHour(hour)}
+                testID={`afternoon-hour-container-${hour}`}
               >
                 <HourText selected={selectedHour === hour}>
                   {hourFormatted}

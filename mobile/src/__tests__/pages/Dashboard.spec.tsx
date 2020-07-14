@@ -6,14 +6,14 @@ import api from '../../services/api';
 
 import Dashboard from '../../pages/Dashboard';
 
-const mockNavigate = jest.fn();
-
 const mockUser = {
   id: 'user-id',
   name: 'user-name',
   email: 'user@email.com',
   avatar_url: 'user-avatar.png',
 };
+
+const mockNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
@@ -30,6 +30,10 @@ jest.mock('../../hooks/auth', () => ({
 const mockApi = new MockAdapter(api);
 
 describe('Dashboard Page', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear();
+  });
+
   it('should be able to render Dashboard page', async () => {
     const providers = [
       {
