@@ -157,20 +157,28 @@ describe('CreateAppointment page', () => {
       expect(getByText('Cabeleireiros')).toBeTruthy();
     });
 
-    expect(getByTestId('provider-provider-id-1-button')).toHaveStyle({
+    expect(getByTestId('provider-provider-id-1-container')).toHaveStyle({
       backgroundColor: '#ff9000',
     });
 
-    const providerTwoButton = getByTestId('provider-provider-id-2-button');
+    expect(getByTestId('morning-hour-container-9')).toHaveStyle({
+      opacity: 1,
+      backgroundColor: '#3e3b47',
+    });
+    expect(getByTestId('morning-hour-container-9')).toHaveProp('enabled', true);
 
-    expect(providerTwoButton).toHaveStyle({
+    const providerTwoContainer = getByTestId(
+      'provider-provider-id-2-container',
+    );
+
+    expect(providerTwoContainer).toHaveStyle({
       backgroundColor: '#3e3b47',
     });
 
-    fireEvent.press(providerTwoButton);
+    fireEvent.press(providerTwoContainer);
 
     await waitFor(() => {
-      expect(providerTwoButton).toHaveStyle({
+      expect(providerTwoContainer).toHaveStyle({
         backgroundColor: '#ff9000',
       });
     });

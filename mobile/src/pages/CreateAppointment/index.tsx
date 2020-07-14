@@ -179,7 +179,7 @@ const CreateAppointment: React.FC = () => {
               <ProviderContainer
                 onPress={() => handleSelecProvider(provider.id)}
                 selected={provider.id === selectedProvider}
-                testID={`provider-${provider.id}-button`}
+                testID={`provider-${provider.id}-container`}
               >
                 <ProviderAvatar
                   source={{
