@@ -14,12 +14,14 @@ const mockUser = {
 };
 
 const mockNavigate = jest.fn();
+const mockGoBack = jest.fn();
+const mockReset = jest.fn();
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: mockNavigate,
-    goBack: jest.fn(),
-    reset: jest.fn(),
+    goBack: mockGoBack,
+    reset: mockReset,
   }),
   useRoute: () => ({
     params: {
@@ -36,10 +38,11 @@ jest.mock('../../hooks/auth', () => ({
 
 const mockApi = new MockAdapter(api);
 
-type MockResponse = [string, string, number, any];
+type MockResponse = [string, string, number, any?];
 
 describe('CreateAppointment page', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     mockApi.reset();
   });
 
@@ -165,7 +168,7 @@ describe('CreateAppointment page', () => {
       opacity: 1,
       backgroundColor: '#3e3b47',
     });
-    expect(getByTestId('morning-hour-container-9')).toHaveProp('enabled', true);
+    expect(getByTestId('morning-hour-container-9')).toHaveProp('enabled');
 
     const providerTwoContainer = getByTestId(
       'provider-provider-id-2-container',
@@ -194,33 +197,192 @@ describe('CreateAppointment page', () => {
       opacity: 1,
       backgroundColor: '#3e3b47',
     });
-    expect(getByTestId('morning-hour-container-8')).toHaveProp('enabled', true);
+    expect(getByTestId('morning-hour-container-8').props.enabled).toBeTruthy();
 
     expect(getByTestId('morning-hour-container-9')).toHaveStyle({
       opacity: 0.3,
       backgroundColor: '#3e3b47',
     });
-    expect(getByTestId('morning-hour-container-9')).toHaveProp(
-      'enabled',
-      false,
-    );
+    expect(getByTestId('morning-hour-container-9').props.enabled).toBeFalsy();
 
     expect(getByTestId('afternoon-hour-container-14')).toHaveStyle({
       opacity: 1,
       backgroundColor: '#3e3b47',
     });
-    expect(getByTestId('afternoon-hour-container-14')).toHaveProp(
-      'enabled',
-      true,
-    );
+    expect(
+      getByTestId('afternoon-hour-container-14').props.enabled,
+    ).toBeTruthy();
 
     expect(getByTestId('afternoon-hour-container-17')).toHaveStyle({
       opacity: 0.3,
       backgroundColor: '#3e3b47',
     });
-    expect(getByTestId('afternoon-hour-container-17')).toHaveProp(
-      'enabled',
-      false,
+    expect(
+      getByTestId('afternoon-hour-container-17').props.enabled,
+    ).toBeFalsy();
+  });
+
+  it('should be able to create an appointment', async () => {
+    const hourStart = 8;
+
+    const eachHourArray = Array.from(
+      { length: 10 },
+      (_, index) => index + hourStart,
     );
+
+    const availability = eachHourArray.map(hour => {
+      return {
+        hour,
+        available: true,
+      };
+    });
+
+    const providers = [
+      {
+        id: 'provider-id-1',
+        name: 'provider-name-1',
+        avatar_url: 'provider-1-avatar.png',
+      },
+      {
+        id: 'provider-id-2',
+        name: 'provider-name-2',
+        avatar_url: 'provider-2-avatar.png',
+      },
+    ];
+
+    mockApi
+      .onGet('providers')
+      .reply(200, providers)
+      .onGet('providers/provider-id-1/day-availability')
+      .reply(200, availability);
+
+    mockApi.onPost('/appointments').reply(200);
+
+    const { getByText, getByTestId } = render(<CreateAppointment />);
+
+    await waitFor(() => {
+      expect(getByText('Cabeleireiros')).toBeTruthy();
+    });
+
+    expect(getByTestId('provider-provider-id-1-container')).toHaveStyle({
+      backgroundColor: '#ff9000',
+    });
+
+    const nineHourContainer = getByTestId('morning-hour-container-9');
+
+    expect(nineHourContainer).toHaveStyle({
+      opacity: 1,
+      backgroundColor: '#3e3b47',
+    });
+    expect(nineHourContainer.props.enabled).toBeTruthy();
+
+    fireEvent.press(nineHourContainer);
+
+    expect(nineHourContainer.props.selected).toBeTruthy();
+    expect(nineHourContainer).toHaveStyle({ backgroundColor: '#ff9000' });
+
+    const bookAppointmentButton = getByText('Agendar');
+
+    fireEvent.press(bookAppointmentButton);
+
+    await waitFor(() => {
+      expect(mockReset).toHaveBeenCalledWith(
+        expect.objectContaining({
+          routes: [
+            {
+              name: 'AppointmentCreated',
+              params: { date: expect.any(Number) },
+            },
+          ],
+          index: 0,
+        }),
+      );
+    });
+  });
+
+  it('should be able to create an appointment', async () => {
+    const hourStart = 8;
+
+    const eachHourArray = Array.from(
+      { length: 10 },
+      (_, index) => index + hourStart,
+    );
+
+    const availabilityOne = eachHourArray.map(hour => {
+      return {
+        hour,
+        available: true,
+      };
+    });
+
+    const availabilityTwo = eachHourArray.map(hour => {
+      return {
+        hour,
+        available: hour % 2 === 0,
+      };
+    });
+
+    const providers = [
+      {
+        id: 'provider-id-1',
+        name: 'provider-name-1',
+        avatar_url: 'provider-1-avatar.png',
+      },
+      {
+        id: 'provider-id-2',
+        name: 'provider-name-2',
+        avatar_url: 'provider-2-avatar.png',
+      },
+    ];
+
+    const responses: MockResponse[] = [
+      ['GET', 'providers', 200, providers],
+      ['GET', 'providers/provider-id-1/day-availability', 200, availabilityOne],
+      ['GET', 'providers/provider-id-2/day-availability', 200, availabilityTwo],
+    ];
+
+    mockApi.onAny().reply(config => {
+      const result = responses.shift();
+
+      const [method, url, ...response] = result as MockResponse;
+
+      if (config.url === url && config.method?.toUpperCase() === method) {
+        return response;
+      }
+
+      return [500, {}];
+    });
+
+    const { getByText, getByTestId } = render(<CreateAppointment />);
+
+    await waitFor(() => {
+      expect(getByText('Cabeleireiros')).toBeTruthy();
+    });
+
+    expect(getByTestId('provider-provider-id-1-container')).toHaveStyle({
+      backgroundColor: '#ff9000',
+    });
+
+    expect(getByTestId('morning-hour-container-9')).toHaveStyle({
+      opacity: 1,
+      backgroundColor: '#3e3b47',
+    });
+    expect(getByTestId('morning-hour-container-9').props.enabled).toBeTruthy();
+
+    const providerTwoContainer = getByTestId(
+      'provider-provider-id-2-container',
+    );
+
+    expect(providerTwoContainer).toHaveStyle({
+      backgroundColor: '#3e3b47',
+    });
+
+    fireEvent.press(providerTwoContainer);
+
+    await waitFor(() => {
+      expect(providerTwoContainer).toHaveStyle({
+        backgroundColor: '#ff9000',
+      });
+    });
   });
 });

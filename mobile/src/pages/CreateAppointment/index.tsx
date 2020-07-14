@@ -140,7 +140,7 @@ const CreateAppointment: React.FC = () => {
         return {
           hour,
           available,
-          hourFormatted: format(new Date(Date.now()).setHours(hour), 'HH:00'),
+          hourFormatted: format(new Date().setHours(hour), 'HH:00'),
         };
       });
   }, [availability]);
@@ -152,7 +152,7 @@ const CreateAppointment: React.FC = () => {
         return {
           hour,
           available,
-          hourFormatted: format(new Date(Date.now()).setHours(hour), 'HH:00'),
+          hourFormatted: format(new Date().setHours(hour), 'HH:00'),
         };
       });
   }, [availability]);
