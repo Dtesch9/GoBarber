@@ -37,6 +37,11 @@ jest.mock('../../hooks/auth', () => ({
   }),
 }));
 
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'android',
+  select: () => null,
+}));
+
 const mockApi = new MockAdapter(api);
 
 type MockResponse = [string, string, number, any?];
@@ -363,6 +368,82 @@ describe('CreateAppointment page', () => {
 
     expect(sixteenHourContainer.props.selected).toBeTruthy();
     expect(sixteenHourContainer).toHaveStyle({ backgroundColor: '#ff9000' });
+
+    const bookAppointmentButton = getByText('Agendar');
+
+    fireEvent.press(bookAppointmentButton);
+
+    await waitFor(() => {
+      expect(mockReset).toHaveBeenCalledWith(
+        expect.objectContaining({
+          routes: [
+            {
+              name: 'AppointmentCreated',
+              params: { date: expect.any(Number) },
+            },
+          ],
+          index: 0,
+        }),
+      );
+    });
+  });
+
+  it('should not display DatePicker automatically on android', async () => {
+    const hourStart = 8;
+
+    const eachHourArray = Array.from(
+      { length: 10 },
+      (_, index) => index + hourStart,
+    );
+
+    const availability = eachHourArray.map(hour => {
+      return {
+        hour,
+        available: true,
+      };
+    });
+
+    const providers = [
+      {
+        id: 'provider-id-1',
+        name: 'provider-name-1',
+        avatar_url: 'provider-1-avatar.png',
+      },
+      {
+        id: 'provider-id-2',
+        name: 'provider-name-2',
+        avatar_url: 'provider-2-avatar.png',
+      },
+    ];
+
+    mockApi
+      .onGet('providers')
+      .reply(200, providers)
+      .onGet('providers/provider-id-1/day-availability')
+      .reply(200, availability);
+
+    mockApi.onPost('/appointments').reply(200);
+
+    const { getByText, getByTestId, queryByTestId } = render(
+      <CreateAppointment />,
+    );
+
+    await waitFor(() => {
+      expect(getByText('Cabeleireiros')).toBeTruthy();
+    });
+
+    expect(getByTestId('provider-provider-id-1-container')).toHaveStyle({
+      backgroundColor: '#ff9000',
+    });
+
+    const sixteenHourContainer = getByTestId('afternoon-hour-container-16');
+
+    fireEvent.press(sixteenHourContainer);
+
+    expect(sixteenHourContainer.props.selected).toBeTruthy();
+    expect(sixteenHourContainer).toHaveStyle({ backgroundColor: '#ff9000' });
+
+    expect(queryByTestId('date-picker')).toBeNull();
 
     const bookAppointmentButton = getByText('Agendar');
 
