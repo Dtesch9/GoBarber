@@ -63,7 +63,7 @@ describe('Dashboard Page', () => {
     expect(getByTestId('provider-provider-id-2-button')).toBeTruthy();
   });
 
-  it('should be able to display a standad avatar if avatar not provided', async () => {
+  it('should be able to display a standard avatar if avatar not provided', async () => {
     const providers = [
       {
         id: 'provider-id-1',

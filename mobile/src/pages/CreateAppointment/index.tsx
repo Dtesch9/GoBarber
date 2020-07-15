@@ -103,7 +103,11 @@ const CreateAppointment: React.FC = () => {
     }
   }, []);
 
-  const handleSelectHour = useCallback((hour: number) => {
+  const handleSelectHour = useCallback((hour: number, available: boolean) => {
+    if (!available) {
+      return;
+    }
+
     setSelectedHour(hour);
   }, []);
 
@@ -160,7 +164,7 @@ const CreateAppointment: React.FC = () => {
   return (
     <Container>
       <Header>
-        <BackButton onPress={navigateBack}>
+        <BackButton onPress={navigateBack} testID="back-button">
           <Icon name="chevron-left" size={24} color="#999591" />
         </BackButton>
 
@@ -187,6 +191,7 @@ const CreateAppointment: React.FC = () => {
                       ? provider.avatar_url
                       : 'https://api.adorable.io/avatars/55/abott@adorable.png',
                   }}
+                  testID={`provider-${provider.id}-avatar`}
                 />
                 <ProviderName selected={provider.id === selectedProvider}>
                   {provider.name}
@@ -212,6 +217,7 @@ const CreateAppointment: React.FC = () => {
               onChange={handleDateChange}
               textColor="#f4ede8"
               value={selectedDate}
+              testID="date-picker"
             />
           )}
         </Calendar>
@@ -230,7 +236,7 @@ const CreateAppointment: React.FC = () => {
                 selected={selectedHour === hour}
                 available={available}
                 key={hourFormatted}
-                onPress={() => handleSelectHour(hour)}
+                onPress={() => handleSelectHour(hour, available)}
                 testID={`morning-hour-container-${hour}`}
               >
                 <HourText selected={selectedHour === hour}>
@@ -251,7 +257,7 @@ const CreateAppointment: React.FC = () => {
                 selected={selectedHour === hour}
                 available={available}
                 key={hourFormatted}
-                onPress={() => handleSelectHour(hour)}
+                onPress={() => handleSelectHour(hour, available)}
                 testID={`afternoon-hour-container-${hour}`}
               >
                 <HourText selected={selectedHour === hour}>
