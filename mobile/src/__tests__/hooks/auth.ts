@@ -149,7 +149,9 @@ describe('Auth hook', () => {
 
     expect(result.current.user).toEqual(expect.objectContaining(mockData.user));
 
-    result.current.signOut();
+    act(() => {
+      result.current.signOut();
+    });
 
     expect(multiRemoveSpy).toHaveBeenCalledWith([
       '@GoBarber:token',
@@ -173,7 +175,11 @@ describe('Auth hook', () => {
       wrapper: AuthProvider,
     });
 
-    result.current.updateUser(user);
+    act(() => {
+      result.current.updateUser(user);
+    });
+
+    await waitForNextUpdate();
 
     expect(setItemSpy).toHaveBeenCalledWith(
       '@GoBarber:user',
