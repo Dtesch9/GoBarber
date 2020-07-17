@@ -1,5 +1,4 @@
-import React, { RefObject } from 'react';
-import { TextInput } from 'react-native';
+import React from 'react';
 import { render, fireEvent, waitFor } from 'react-native-testing-library';
 
 import Input from '../../components/Input';
@@ -43,7 +42,7 @@ describe('Input component', () => {
     expect(testInput).toBeTruthy();
   });
 
-  it('should be able to highlight the component when input is focused', () => {
+  it('should be able to highlight the component when input is focused', async () => {
     const { getByPlaceholder, getByTestId } = render(
       <Input name="name" icon="airplay" placeholder="Test input" />,
     );
@@ -52,13 +51,15 @@ describe('Input component', () => {
 
     fireEvent(inputElement, 'focus');
 
-    expect(getByTestId('input-container')).toHaveStyle({
-      borderColor: '#ff9000',
+    await waitFor(() => {
+      expect(getByTestId('input-container')).toHaveStyle({
+        borderColor: '#ff9000',
+      });
+      expect(getByTestId('input-icon')).toHaveStyle({
+        color: '#ff9000',
+      });
+      expect(inputElement).toBeTruthy();
     });
-    expect(getByTestId('input-icon')).toHaveStyle({
-      color: '#ff9000',
-    });
-    expect(inputElement).toBeTruthy();
   });
 
   it('should be able keep input icon highlight when input is filled', () => {
