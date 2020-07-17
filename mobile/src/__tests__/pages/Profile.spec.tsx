@@ -312,4 +312,15 @@ describe('Profile page', () => {
       );
     });
   });
+
+  it('should KeyboardAvoidingView to have behavior undefined on android', () => {
+    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+      OS: 'android',
+      select: () => null,
+    }));
+
+    const { UNSAFE_queryByProps } = render(<Profile />);
+
+    expect(UNSAFE_queryByProps({ behavior: undefined })).toBeTruthy();
+  });
 });

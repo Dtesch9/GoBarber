@@ -162,4 +162,15 @@ describe('SignUp page', () => {
       expect(mockGoBack).toHaveBeenCalled();
     });
   });
+
+  it('should KeyboardAvoidingView to have behavior undefined on android', () => {
+    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+      OS: 'android',
+      select: () => null,
+    }));
+
+    const { UNSAFE_queryByProps } = render(<SignUp />);
+
+    expect(UNSAFE_queryByProps({ behavior: undefined })).toBeTruthy();
+  });
 });

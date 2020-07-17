@@ -148,4 +148,19 @@ describe('SignIn page', () => {
 
     expect(mockNavigate).toHaveBeenCalledWith('ForgotPassword');
   });
+
+  it('should KeyboardAvoidingView to have behavior undefined on android', () => {
+    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+      OS: 'android',
+      select: () => null,
+    }));
+
+    const { UNSAFE_queryByProps, getByPlaceholder } = render(<SignIn />);
+
+    const inputElement = getByPlaceholder('Senha');
+
+    fireEvent(inputElement, 'focus');
+
+    expect(UNSAFE_queryByProps({ behavior: undefined })).toBeTruthy();
+  });
 });
