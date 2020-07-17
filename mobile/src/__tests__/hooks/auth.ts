@@ -161,7 +161,7 @@ describe('Auth hook', () => {
     expect(result.current.user).toBeUndefined();
   });
 
-  it('should be able to sign out', async () => {
+  it('should be able updateProfile', async () => {
     const user = {
       id: 'user-id',
       name: 'user-name',

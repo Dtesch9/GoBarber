@@ -62,7 +62,7 @@ describe('Input component', () => {
     });
   });
 
-  it('should be able keep input icon highlight when input is filled', () => {
+  it('should be able keep input icon highlight when input is filled', async () => {
     const { getByPlaceholder, getByTestId } = render(
       <Input name="name" icon="airplay" placeholder="Test input" />,
     );
@@ -72,21 +72,25 @@ describe('Input component', () => {
 
     fireEvent(inputElement, 'focus');
 
-    expect(getByTestId('input-container')).toHaveStyle({
-      borderColor: '#ff9000',
-    });
-    expect(inputIcon).toHaveStyle({
-      color: '#ff9000',
+    await waitFor(() => {
+      expect(getByTestId('input-container')).toHaveStyle({
+        borderColor: '#ff9000',
+      });
+      expect(inputIcon).toHaveStyle({
+        color: '#ff9000',
+      });
     });
 
     fireEvent.changeText(inputElement, 'is Filled');
     fireEvent(inputElement, 'blur');
 
-    expect(getByTestId('input-container')).toHaveStyle({
-      borderColor: '#232129',
-    });
-    expect(inputIcon).toHaveStyle({
-      color: '#ff9000',
+    await waitFor(() => {
+      expect(getByTestId('input-container')).toHaveStyle({
+        borderColor: '#232129',
+      });
+      expect(inputIcon).toHaveStyle({
+        color: '#ff9000',
+      });
     });
   });
 });
